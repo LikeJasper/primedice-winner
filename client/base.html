@@ -1,0 +1,15 @@
+<head>
+  <title>Primedice Winner</title>
+</head>
+
+<body>
+  <h1>Primedice Winner</h1>
+
+  {{> userInput}}
+</body>
+
+<template name="userInput">
+  <p>Username: <input type="text" name="username"></p>
+  <button>Get balance</button>
+  <p>Your balance is {{getBalance}}.</p>
+</template>

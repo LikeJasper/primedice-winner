@@ -9,7 +9,10 @@
 </body>
 
 <template name="userInput">
-  <p>Username: <input type="text" name="username"></p>
-  <button>Get balance</button>
-  <p>Your balance is {{getBalance}}.</p>
+  <form>
+    <p>Username: <input type="text" name="username"></p>
+    <input type="submit" value="Get balance">
+  </form>
+  <p class="error-text"></p>
+  <p>Your balance is <span id="user-balance">{{getBalance}}</span>.</p>
 </template>

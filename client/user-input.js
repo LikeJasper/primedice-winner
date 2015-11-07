@@ -20,7 +20,7 @@
           errorMsg = error.message;
         } else {
           console.log(result);
-          Session.set('userBalance', Math.floor(result.data.user.profit));
+          Session.set('userBalance', Math.floor(result.data.user.balance));
         }
       });
 
@@ -32,8 +32,9 @@
     getBetTotal: function () {
       return Session.get('betTotal') || 0;
     },
-    getWinLoss: function () {
-      return Session.get('winLoss') || 'won';
+    getWin: function () {
+      Session.setDefault('win', true);
+      return Session.get('win');
     },
     getWinLossTotal: function () {
       return Session.get('winLossTotal') || 0;
@@ -49,6 +50,12 @@
           errorMsg = error.message;
         } else {
           console.log(result);
+
+          var bet = result.data.bet;
+          Session.set('betTotal', bet.amount);
+          Session.set('win', bet.win);
+          Session.set('winLossTotal', Math.ceil(Math.abs(bet.profit)));
+          Session.set('userBalance', Math.floor(result.data.user.balance));
         }
       });
 

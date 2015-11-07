@@ -22,6 +22,6 @@
     <button id="make-bet">Make a bet</button>
     <p class="error-text"></p>
     <p>You bet <span id="bet-total">{{getBetTotal}}</span>.</p>
-    <p>You {{getWinLoss}} <span id="win-loss-total">{{getWinLossTotal}}</span>.</p>
+    <p>You {{#if getWin}}won{{else}}lost{{/if}} <span id="win-loss-total">{{getWinLossTotal}}</span>.</p>
   </div>
 </template>

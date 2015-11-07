@@ -5,11 +5,23 @@
 <body>
   <h1>Primedice Winner</h1>
 
-  {{> userInput}}
+  {{> displayBalance}}
+  {{> makeBet}}
 </body>
 
-<template name="userInput">
-  <button id="get-balance">Get balance</button>
-  <p class="error-text"></p>
-  <p>Your balance is <span id="user-balance">{{getBalance}}</span>.</p>
+<template name="displayBalance">
+  <div id="balance-area">
+    <button id="get-balance">Update balance</button>
+    <p class="error-text"></p>
+    <p>Your balance is <span id="user-balance">{{getBalance}}</span>.</p>
+  </div>
+</template>
+
+<template name="makeBet">
+  <div id="bet-area">
+    <button id="make-bet">Make a bet</button>
+    <p class="error-text"></p>
+    <p>You bet <span id="bet-total">{{getBetTotal}}</span>.</p>
+    <p>You {{getWinLoss}} <span id="win-loss-total">{{getWinLossTotal}}</span>.</p>
+  </div>
 </template>

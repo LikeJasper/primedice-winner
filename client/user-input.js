@@ -17,11 +17,18 @@ Template.userInput.events({
         Session.set('username', username);
       }
 
-      var userBalance = Session.get('userBalance');
-      var newBalance = typeof(userBalance) === "number" ? userBalance + 1 : 0;
-      Session.set('userBalance', newBalance);
+      Meteor.call('getBalance', username, function (error, result) {
+        if (error) {
+          $errorBox.text(error.message);
+        } else {
+          Session.set('userBalance', username);
+          $errorBox.text('');
+        }
+      });
 
-      $errorBox.text('');
+      // var userBalance = Session.get('userBalance');
+      // var newBalance = typeof(userBalance) === "number" ? userBalance + 1 : 0;
+      // Session.set('userBalance', newBalance);
 
     } else {
       $errorBox.text("You need to put in a username");

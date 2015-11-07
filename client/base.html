@@ -6,6 +6,7 @@
   <h1>Primedice Winner</h1>
 
   {{> displayBalance}}
+  <hr>
   {{> makeBet}}
 </body>
 
@@ -19,6 +20,8 @@
 
 <template name="makeBet">
   <div id="bet-area">
+    Amount: <input name="amount" type="number" value="1">
+    Target: <input name="target" type="number" value="50">
     <button id="make-bet">Make a bet</button>
     <p class="error-text"></p>
     <p>You bet <span id="bet-total">{{getBetTotal}}</span>.</p>

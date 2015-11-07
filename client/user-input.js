@@ -44,8 +44,10 @@
   Template.makeBet.events({
     'click #make-bet': function (event) {
       var errorMsg = '';
+      var amount = $('[name=amount]').val();
+      var target = $('[name=target]').val();
 
-      Meteor.call('makeBet', function (error, result) {
+      Meteor.call('makeBet', amount, target, function (error, result) {
         if (error) {
           errorMsg = error.message;
         } else {

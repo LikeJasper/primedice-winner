@@ -17,11 +17,11 @@
     getBalance: function () {
       return HTTP.get(PRIMEDICE_API_ROOT + 'users/1' + ACCESS_SUFFIX);
     },
-    makeBet: function () {
+    makeBet: function (amount, target) {
       return HTTP.post(PRIMEDICE_API_ROOT + 'bet' + ACCESS_SUFFIX, {
         params: {
-          'amount': 1,
-          'target': 50,
+          'amount': amount,
+          'target': target,
           'condition': '<'
         }
       });

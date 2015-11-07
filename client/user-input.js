@@ -1,8 +1,6 @@
-var balance = 0;
-
 Template.userInput.helpers({
   getBalance: function () {
-    return balance;
+    return Session.get('userBalance') || 0;
   }
 });
 
@@ -11,12 +9,20 @@ Template.userInput.events({
     event.preventDefault();
 
     var username = $('[name=username]').val();
-    var $userBalance = $('#user-balance');
     var $errorBox = $('.error-text');
 
     if (username) {
-      $userBalance.text(username);
+
+      if (username !== Session.get('username')) {
+        Session.set('username', username);
+      }
+
+      var userBalance = Session.get('userBalance');
+      var newBalance = typeof(userBalance) === "number" ? userBalance + 1 : 0;
+      Session.set('userBalance', newBalance);
+
       $errorBox.text('');
+
     } else {
       $errorBox.text("You need to put in a username");
     }

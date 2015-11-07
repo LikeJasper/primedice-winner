@@ -3,7 +3,8 @@ Meteor.startup(function () {
 });
 
 Meteor.methods({
-  getBalance: function () {
-    return "Hello";
+  getBalance: function (username) {
+    var responseObj = HTTP.call('GET', 'https://api.primedice.com/api/users/' + username);
+    return responseObj;
   }
 });

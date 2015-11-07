@@ -21,7 +21,8 @@ Template.userInput.events({
         if (error) {
           $errorBox.text(error.message);
         } else {
-          Session.set('userBalance', username);
+          console.log(result);
+          Session.set('userBalance', result.data.user.profit);
           $errorBox.text('');
         }
       });

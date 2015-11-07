@@ -7,7 +7,8 @@
 
   Template.displayBalance.helpers({
     getBalance: function () {
-      return Session.get('userBalance') || 0;
+      Session.setDefault('userBalance', 0);
+      return Session.get('userBalance');
     }
   });
 
@@ -43,13 +44,15 @@
 
   Template.makeBet.events({
     'click #make-bet': function (event) {
-      var errorMsg = '';
+      var $errorSpace = $('#bet-area .error-text');
+
       var amount = $('[name=amount]').val();
       var target = $('[name=target]').val();
+      var balance = Session.get('userBalance');
 
-      Meteor.call('makeBet', amount, target, function (error, result) {
+      Meteor.call('makeBet', amount, target, balance, function (error, result) {
         if (error) {
-          errorMsg = error.message;
+          $errorSpace.text(error.message);
         } else {
           console.log(result);
 
@@ -58,10 +61,10 @@
           Session.set('win', bet.win);
           Session.set('winLossTotal', Math.ceil(Math.abs(bet.profit)));
           Session.set('userBalance', Math.floor(result.data.user.balance));
+
+          $errorSpace.text('');
         }
       });
-
-      $('#bet-area .error-text').text(errorMsg);
     }
   });
 

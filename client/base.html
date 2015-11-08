@@ -54,7 +54,7 @@
       </div>
     </form>
     <p class="error-text"></p>
-    <p>You bet <span id="bet-total">{{getBetTotal}}</span>. You {{#if getBetWin}}won{{else}}lost{{/if}} <span id="win-loss-total">{{getBetWinLossTotal}}</span>.</p>
+    <p>You bet <span id="bet-total">{{getLatestSingleBet.total}}</span>. You {{#if getLatestSingleBet.win}}won{{else}}lost{{/if}} <span id="win-loss-total">{{getLatestSingleBet.winLossTotal}}</span>.</p>
   </div>
 </template>
 
@@ -89,6 +89,6 @@
       </div>
     </form>
     <p class="error-text"></p>
-    <p>You bet <span id="run-total">{{getRunTotal}}</span>. You {{#if getRunWin}}won{{else}}lost{{/if}} <span id="run-win-loss-total">{{getRunWinLossTotal}}</span>.</p>
+    <p>You bet <span id="run-total">{{getLatestRunBet.total}}</span>. You {{#if getLatestRunBet.win}}won{{else}}lost{{/if}} <span id="run-win-loss-total">{{getLatestRunBet.winLossTotal}}</span>.</p>
   </div>
 </template>

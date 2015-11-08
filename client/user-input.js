@@ -19,7 +19,7 @@
 
   }
 
-  function callMakeBet (space, betAmount, target, balance, callback) {
+  function callMakeBet (space, betAmount, target, balance) {
     var $errorSpace = $('#' + space + '-area .error-text');
     Meteor.call('makeBet', betAmount, target, balance, function (error, result) {
 
@@ -31,20 +31,23 @@
 
         var betResult = result.data.bet;
         console.log(betResult);
+        var betObject = {
+          total: betResult.amount,
+          win: betResult.win,
+          winLossTotal: Math.ceil(Math.abs(betResult.profit))
+        };
 
-        Session.set(space + 'Total', betResult.amount);
-        Session.set(space + 'Win', betResult.win);
-        Session.set(space + 'WinLossTotal', Math.ceil(Math.abs(betResult.profit)));
+        if (space === 'run') {
+          Session.set('latestRunBet', betObject);
+        } else if (space === 'bet') {
+          Session.set('latestBet', betObject);
+        }
+
         Session.set('userBalance', Math.floor(result.data.user.balance));
-
-        latestBet = betResult;
       }
 
     });
 
-    if (callback) {
-      callback();
-    }
   }
 
   Template.displayBalance.onRendered(callGetBalance);
@@ -62,17 +65,13 @@
   });
 
   Template.makeBet.helpers({
-    getBetTotal: function () {
-      Session.setDefault('betTotal', 0);
-      return Session.get('betTotal');
-    },
-    getBetWin: function () {
-      Session.setDefault('betWin', true);
-      return Session.get('betWin');
-    },
-    getBetWinLossTotal: function () {
-      Session.setDefault('betWinLossTotal', 0);
-      return Session.get('betWinLossTotal');
+    getLatestSingleBet: function () {
+      Session.setDefault('latestBet', {
+        total: 0,
+        win: true,
+        winLossTotal: 0
+      });
+      return Session.get('latestBet');
     }
   });
 
@@ -89,61 +88,65 @@
   });
 
   Template.startRun.helpers({
-    getRunTotal: function () {
-      Session.setDefault('runTotal', 0);
-      return Session.get('runTotal');
-    },
-    getRunWin: function () {
-      Session.setDefault('runWin', true);
-      return Session.get('runWin');
-    },
-    getRunWinLossTotal: function () {
-      Session.setDefault('runWinLossTotal', 0);
-      return Session.get('runWinLossTotal');
+    getLatestRunBet: function () {
+      Session.setDefault('latestRunBet', {
+        total: 0,
+        win: true,
+        winLossTotal: 0
+      });
+      return Session.get('latestRunBet');
     }
   });
 
   var runTimer;
   var PRIMEDICE_RATE_LIMIT = 525; // live value
   // var PRIMEDICE_RATE_LIMIT = 2000; // slower for testing purposes
-  var bet = 1;
-  var latestBet = {};
 
   Template.startRun.events({
     'submit form': function (event) {
       event.preventDefault();
 
+      var bet = 1;
       var base = parseInt($('[name=base]').val());
       var target = $('[name=run-target]').val();
       var stopBalance = $('[name=stop-target]').val();
       var balance;
 
-      latestBet = {};
+      Session.set('latestRunBet', {
+        total: 0,
+        win: true,
+        winLossTotal: 0
+      });
       bet = base;
 
       runTimer = setInterval(function () {
         balance = Session.get('userBalance');
 
-        if (latestBet.win) {
+        if (Session.get('latestRunBet').win) {
           bet = base;
         } else {
 
           if (balance === 0) {
+            // lost it all
             alert('Balance is empty! Visit the Primedice faucet to top up.');
             clearInterval(runTimer);
             return;
           } else if (balance >= stopBalance) {
+            // reached target
             alert('Balance has reached target!');
             clearInterval(runTimer);
             return;
           } else if (balance < 100) {
+            // may as well bet it all and reload from faucet if empty
             bet = balance;
           } else if (balance < 2 * bet) {
+            // not enough to continue technique but better than starting with faucet amount
             if (balance < base) {
               base = 1;
             }
             bet = base;
           } else {
+            // doubling technique
             bet *= 2;
           }
         }

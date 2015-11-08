@@ -5,6 +5,21 @@
 (function () {
   'use strict';
 
+  function callGetBalance () {
+
+    Meteor.call('getBalance', function (error, result) {
+      if (error) {
+        $('#balance-area .error-text').text(error.message);
+      } else {
+        console.log(result);
+        Session.set('userBalance', Math.floor(result.data.user.balance));
+      }
+    });
+
+  }
+
+  Template.displayBalance.onRendered(callGetBalance);
+
   Template.displayBalance.helpers({
     getBalance: function () {
       Session.setDefault('userBalance', 0);
@@ -13,20 +28,7 @@
   });
 
   Template.displayBalance.events({
-    'click #get-balance': function (event) {
-      var errorMsg = '';
-
-      Meteor.call('getBalance', function (error, result) {
-        if (error) {
-          errorMsg = error.message;
-        } else {
-          console.log(result);
-          Session.set('userBalance', Math.floor(result.data.user.balance));
-        }
-      });
-
-      $('#balance-area .error-text').text(errorMsg);
-    }
+    'click #get-balance': callGetBalance
   });
 
   Template.makeBet.helpers({
@@ -87,7 +89,7 @@
 
   Template.startRun.events({
     'click #start-run': function (event) {
-      var $errorSpace = $('#run-area .error-text');
+      // var $errorSpace = $('#run-area .error-text');
 
       var base = $('[name=base]').val();
       var target = $('[name=run-target]').val();

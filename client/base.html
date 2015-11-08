@@ -31,12 +31,19 @@
     <form class="form-inline">
       <div class="form-group">
         <label for="amount">Amount</label>
-        <input name="amount" class="form-control" type="number" value="1">
+        <div class="input-group">
+          <input name="amount" class="form-control" type="number" value="1">
+          <div class="input-group-addon">satoshi</div>
+        </div>
       </div>
       <div class="form-group">
-        <label for="bet-target">Target</label>
-        <input name="bet-target" class="form-control" type="number" value="50">
+        <label for="bet-target">Win probability</label>
+        <div class="input-group">
+          <input name="bet-target" class="form-control" type="number" value="50">
+          <div class="input-group-addon">%</div>
+        </div>
       </div>
+      <br><br>
       <button id="make-bet" class="btn btn-success" type="submit">Make a bet</button>
     </form>
     <p class="error-text"></p>
@@ -50,12 +57,19 @@
     <form class="form-inline">
       <div class="form-group">
         <label for="base">Base</label>
-        <input name="base" class="form-control" type="number" value="1">
+        <div class="input-group">
+          <input name="base" class="form-control" type="number" value="1">
+          <div class="input-group-addon">satoshi</div>
+        </div>
       </div>
       <div class="form-group">
-        <label for="run-target">Target</label>
-        <input name="run-target" class="form-control" type="number" value="33">
+        <label for="run-target">Win probability</label>
+        <div class="input-group">
+          <input name="run-target" class="form-control" type="number" value="33">
+          <div class="input-group-addon">%</div>
+        </div>
       </div>
+      <br><br>
       <button id="start-run" class="btn btn-success" type="submit">Start run</button>
       <button id="stop-run" class="btn btn-danger" type="button">Stop run</button>
     </form>

@@ -14,9 +14,9 @@
 
 <template name="displayBalance">
   <div id="balance-area">
+    Your balance is <span id="user-balance">{{getBalance}}</span>.
     <button id="get-balance">Update balance</button>
     <p class="error-text"></p>
-    <p>Your balance is <span id="user-balance">{{getBalance}}</span>.</p>
   </div>
 </template>
 

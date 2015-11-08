@@ -31,14 +31,16 @@
 
   Template.makeBet.helpers({
     getBetTotal: function () {
-      return Session.get('betTotal') || 0;
+      Session.setDefault('betTotal', 0);
+      return Session.get('betTotal');
     },
-    getWin: function () {
-      Session.setDefault('win', true);
-      return Session.get('win');
+    getBetWin: function () {
+      Session.setDefault('betWin', true);
+      return Session.get('betWin');
     },
-    getWinLossTotal: function () {
-      return Session.get('winLossTotal') || 0;
+    getBetWinLossTotal: function () {
+      Session.setDefault('betWinLossTotal', 0);
+      return Session.get('betWinLossTotal');
     }
   });
 
@@ -47,7 +49,7 @@
       var $errorSpace = $('#bet-area .error-text');
 
       var amount = $('[name=amount]').val();
-      var target = $('[name=target]').val();
+      var target = $('[name=bet-target]').val();
       var balance = Session.get('userBalance');
 
       Meteor.call('makeBet', amount, target, balance, function (error, result) {
@@ -58,13 +60,47 @@
 
           var bet = result.data.bet;
           Session.set('betTotal', bet.amount);
-          Session.set('win', bet.win);
-          Session.set('winLossTotal', Math.ceil(Math.abs(bet.profit)));
+          Session.set('betWin', bet.win);
+          Session.set('betWinLossTotal', Math.ceil(Math.abs(bet.profit)));
           Session.set('userBalance', Math.floor(result.data.user.balance));
 
           $errorSpace.text('');
         }
       });
+    }
+  });
+
+  Template.startRun.helpers({
+    getRunTotal: function () {
+      Session.setDefault('runTotal', 0);
+      return Session.get('runTotal');
+    },
+    getRunWin: function () {
+      Session.setDefault('runWin', true);
+      return Session.get('runWin');
+    },
+    getRunWinLossTotal: function () {
+      Session.setDefault('runWinLossTotal', 0);
+      return Session.get('runWinLossTotal');
+    }
+  });
+
+  Template.startRun.events({
+    'click #start-run': function (event) {
+      var $errorSpace = $('#run-area .error-text');
+
+      var base = $('[name=base]').val();
+      var target = $('[name=run-target]').val();
+      var balance = Session.get('userBalance');
+      var bet;
+
+      for (var i=1; i<10; i++) {
+        bet = parseInt(base) * i;
+        setTimeout(
+          Meteor.call('makeBet', bet.toString(), target, balance),
+          2000
+        );
+      }
     }
   });
 

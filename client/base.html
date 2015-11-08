@@ -8,6 +8,8 @@
   {{> displayBalance}}
   <hr>
   {{> makeBet}}
+  <hr>
+  {{> startRun}}
 </body>
 
 <template name="displayBalance">
@@ -21,10 +23,21 @@
 <template name="makeBet">
   <div id="bet-area">
     Amount: <input name="amount" type="number" value="1">
-    Target: <input name="target" type="number" value="50">
+    Target: <input name="bet-target" type="number" value="50">
     <button id="make-bet">Make a bet</button>
     <p class="error-text"></p>
     <p>You bet <span id="bet-total">{{getBetTotal}}</span>.</p>
-    <p>You {{#if getWin}}won{{else}}lost{{/if}} <span id="win-loss-total">{{getWinLossTotal}}</span>.</p>
+    <p>You {{#if getBetWin}}won{{else}}lost{{/if}} <span id="win-loss-total">{{getBetWinLossTotal}}</span>.</p>
+  </div>
+</template>
+
+<template name="startRun">
+  <div id="run-area">
+    Base: <input name="base" type="number" value="1">
+    Target: <input name="run-target" type="number" value="33">
+    <button id="start-run">Start run</button>
+    <p class="error-text"></p>
+    <p>You bet <span id="run-total">{{getRunTotal}}</span>.</p>
+    <p>You {{#if getRunWin}}won{{else}}lost{{/if}} <span id="run-win-loss-total">{{getRunWinLossTotal}}</span>.</p>
   </div>
 </template>

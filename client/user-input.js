@@ -21,8 +21,6 @@
 
   function callMakeBet (space, betAmount, target, balance) {
     var $errorSpace = $('#' + space + '-area .error-text');
-    var betResult;
-
     Meteor.call('makeBet', betAmount, target, balance, function (error, result) {
 
       if (error) {
@@ -32,15 +30,17 @@
         console.log(result);
         $errorSpace.text('');
 
-        betResult = result.data.bet;
+        var betResult = result.data.bet;
+        console.log(betResult);
         Session.set(space + 'Total', betResult.amount);
         Session.set(space + 'Win', betResult.win);
         Session.set(space + 'WinLossTotal', Math.ceil(Math.abs(betResult.profit)));
         Session.set('userBalance', Math.floor(result.data.user.balance));
+
+        latestBet = betResult;
       }
 
     });
-    return betResult;
   }
 
   Template.displayBalance.onRendered(callGetBalance);
@@ -98,18 +98,30 @@
   });
 
   var runTimer;
+  // var PRIMEDICE_RATE_LIMIT = 525; // live value
+  var PRIMEDICE_RATE_LIMIT = 2000; // easier to test/debug
+  var bet = 1;
+  var latestBet = {};
 
   Template.startRun.events({
     'click #start-run': function () {
       var base = parseInt($('[name=base]').val());
       var target = $('[name=run-target]').val();
       var balance = Session.get('userBalance');
-      var bet = 1;
-      var betResult;
 
       runTimer = setInterval(function () {
-        betResult = callMakeBet('run', bet.toString(), target, balance);
-      }, 525); // primedice api is rate limited
+
+        if (latestBet.win) {
+          console.log('won :)');
+          bet = base;
+        } else {
+          console.log('lost :(');
+          bet *= 2;
+        }
+
+        callMakeBet('run', bet.toString(), target, balance);
+
+      }, PRIMEDICE_RATE_LIMIT);
     },
     'click #stop-run': function () {
       clearInterval(runTimer);

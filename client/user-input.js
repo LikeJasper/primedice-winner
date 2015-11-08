@@ -5,6 +5,8 @@
 (function () {
   'use strict';
 
+  var runTimer;
+
   function callGetBalance () {
 
     Meteor.call('getBalance', function (error, result) {
@@ -117,9 +119,12 @@
       var balance = Session.get('userBalance');
       var bet = 1;
 
-      setInterval(function () {
+      runTimer = setInterval(function () {
         callMakeBet('run', bet, target, balance);
-      }, 5000);
+      }, 2000);
+    },
+    'click #stop-run': function () {
+      clearInterval(runTimer);
     }
   });
 

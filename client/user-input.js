@@ -124,7 +124,7 @@
         } else {
 
           if (balance === 0) {
-            alert('Balance is empty!');
+            alert('Balance is empty! Visit the Primedice faucet to top up.');
             clearInterval(runTimer);
           } else if (balance < 2 * bet) {
             if (balance < base) {

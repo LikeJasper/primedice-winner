@@ -18,6 +18,28 @@
 
   }
 
+  function callMakeBet (space, bet, target, balance) {
+
+    Meteor.call('makeBet', bet.toString(), target, balance, function (error, result) {
+      var $errorSpace = $('#run-area .error-text');
+
+      if (error) {
+        $errorSpace.text(error.message);
+      } else {
+        console.log(result);
+
+        var bet = result.data.bet;
+        Session.set('runTotal', bet.amount);
+        Session.set('runWin', bet.win);
+        Session.set('runWinLossTotal', Math.ceil(Math.abs(bet.profit)));
+        Session.set('userBalance', Math.floor(result.data.user.balance));
+
+        $errorSpace.text('');
+      }
+
+    });
+  }
+
   Template.displayBalance.onRendered(callGetBalance);
 
   Template.displayBalance.helpers({
@@ -28,6 +50,7 @@
   });
 
   Template.displayBalance.events({
+    // needed in case a bet is made on the primedice site
     'click #get-balance': callGetBalance
   });
 
@@ -89,20 +112,14 @@
 
   Template.startRun.events({
     'click #start-run': function (event) {
-      // var $errorSpace = $('#run-area .error-text');
-
-      var base = $('[name=base]').val();
+      var base = parseInt($('[name=base]').val());
       var target = $('[name=run-target]').val();
       var balance = Session.get('userBalance');
-      var bet;
+      var bet = 1;
 
-      for (var i=1; i<10; i++) {
-        bet = parseInt(base) * i;
-        setTimeout(
-          Meteor.call('makeBet', bet.toString(), target, balance),
-          2000
-        );
-      }
+      setInterval(function () {
+        callMakeBet('run', bet, target, balance);
+      }, 5000);
     }
   });
 

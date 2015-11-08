@@ -5,8 +5,6 @@
 (function () {
   'use strict';
 
-  var runTimer;
-
   function callGetBalance () {
 
     Meteor.call('getBalance', function (error, result) {
@@ -112,8 +110,10 @@
     }
   });
 
+  var runTimer;
+
   Template.startRun.events({
-    'click #start-run': function (event) {
+    'click #start-run': function () {
       var base = parseInt($('[name=base]').val());
       var target = $('[name=run-target]').val();
       var balance = Session.get('userBalance');
@@ -121,7 +121,7 @@
 
       runTimer = setInterval(function () {
         callMakeBet('run', bet, target, balance);
-      }, 2000);
+      }, 525); // primedice api is rate limited
     },
     'click #stop-run': function () {
       clearInterval(runTimer);

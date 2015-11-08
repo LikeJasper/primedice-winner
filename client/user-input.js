@@ -9,6 +9,7 @@
 
     Meteor.call('getBalance', function (error, result) {
       if (error) {
+        console.log(error);
         $('#balance-area .error-text').text(error.message);
       } else {
         console.log(result);
@@ -18,26 +19,28 @@
 
   }
 
-  function callMakeBet (space, bet, target, balance) {
+  function callMakeBet (space, betAmount, target, balance) {
+    var $errorSpace = $('#' + space + '-area .error-text');
+    var betResult;
 
-    Meteor.call('makeBet', bet.toString(), target, balance, function (error, result) {
-      var $errorSpace = $('#run-area .error-text');
+    Meteor.call('makeBet', betAmount, target, balance, function (error, result) {
 
       if (error) {
+        console.log(error);
         $errorSpace.text(error.message);
       } else {
         console.log(result);
-
-        var bet = result.data.bet;
-        Session.set('runTotal', bet.amount);
-        Session.set('runWin', bet.win);
-        Session.set('runWinLossTotal', Math.ceil(Math.abs(bet.profit)));
-        Session.set('userBalance', Math.floor(result.data.user.balance));
-
         $errorSpace.text('');
+
+        betResult = result.data.bet;
+        Session.set(space + 'Total', betResult.amount);
+        Session.set(space + 'Win', betResult.win);
+        Session.set(space + 'WinLossTotal', Math.ceil(Math.abs(betResult.profit)));
+        Session.set('userBalance', Math.floor(result.data.user.balance));
       }
 
     });
+    return betResult;
   }
 
   Template.displayBalance.onRendered(callGetBalance);
@@ -71,27 +74,11 @@
 
   Template.makeBet.events({
     'click #make-bet': function (event) {
-      var $errorSpace = $('#bet-area .error-text');
-
       var amount = $('[name=amount]').val();
       var target = $('[name=bet-target]').val();
       var balance = Session.get('userBalance');
 
-      Meteor.call('makeBet', amount, target, balance, function (error, result) {
-        if (error) {
-          $errorSpace.text(error.message);
-        } else {
-          console.log(result);
-
-          var bet = result.data.bet;
-          Session.set('betTotal', bet.amount);
-          Session.set('betWin', bet.win);
-          Session.set('betWinLossTotal', Math.ceil(Math.abs(bet.profit)));
-          Session.set('userBalance', Math.floor(result.data.user.balance));
-
-          $errorSpace.text('');
-        }
-      });
+      callMakeBet('bet', amount, target, balance);
     }
   });
 
@@ -118,9 +105,10 @@
       var target = $('[name=run-target]').val();
       var balance = Session.get('userBalance');
       var bet = 1;
+      var betResult;
 
       runTimer = setInterval(function () {
-        callMakeBet('run', bet, target, balance);
+        betResult = callMakeBet('run', bet.toString(), target, balance);
       }, 525); // primedice api is rate limited
     },
     'click #stop-run': function () {

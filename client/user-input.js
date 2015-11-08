@@ -27,11 +27,11 @@
         console.log(error);
         $errorSpace.text(error.message);
       } else {
-        console.log(result);
         $errorSpace.text('');
 
         var betResult = result.data.bet;
         console.log(betResult);
+
         Session.set(space + 'Total', betResult.amount);
         Session.set(space + 'Win', betResult.win);
         Session.set(space + 'WinLossTotal', Math.ceil(Math.abs(betResult.profit)));
@@ -77,7 +77,9 @@
   });
 
   Template.makeBet.events({
-    'click #make-bet': function (event) {
+    'submit form': function (event) {
+      event.preventDefault();
+
       var amount = $('[name=amount]').val();
       var target = $('[name=bet-target]').val();
       var balance = Session.get('userBalance');
@@ -108,7 +110,9 @@
   var latestBet = {};
 
   Template.startRun.events({
-    'click #start-run': function () {
+    'submit form': function (event) {
+      event.preventDefault();
+
       var base = parseInt($('[name=base]').val());
       var target = $('[name=run-target]').val();
       var balance;

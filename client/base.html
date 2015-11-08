@@ -37,7 +37,7 @@
         <label for="bet-target">Target</label>
         <input name="bet-target" class="form-control" type="number" value="50">
       </div>
-      <button id="make-bet" class="btn btn-success">Make a bet</button>
+      <button id="make-bet" class="btn btn-success" type="submit">Make a bet</button>
     </form>
     <p class="error-text"></p>
     <p>You bet <span id="bet-total">{{getBetTotal}}</span>.</p>
@@ -57,8 +57,8 @@
         <label for="run-target">Target</label>
         <input name="run-target" class="form-control" type="number" value="33">
       </div>
-      <button id="start-run" class="btn btn-success">Start run</button>
-      <button id="stop-run" class="btn btn-danger">Stop run</button>
+      <button id="start-run" class="btn btn-success" type="submit">Start run</button>
+      <button id="stop-run" class="btn btn-danger" type="button">Stop run</button>
     </form>
     <p class="error-text"></p>
     <p>You bet <span id="run-total">{{getRunTotal}}</span>. You {{#if getRunWin}}won{{else}}lost{{/if}} <span id="run-win-loss-total">{{getRunWinLossTotal}}</span>.</p>

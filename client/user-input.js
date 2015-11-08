@@ -99,8 +99,6 @@
   });
 
   var runTimer;
-  var PRIMEDICE_RATE_LIMIT = 525; // live value
-  // var PRIMEDICE_RATE_LIMIT = 2000; // slower for testing purposes
 
   Template.startRun.events({
     'submit form': function (event) {
@@ -111,6 +109,9 @@
       var target = $('[name=run-target]').val();
       var stopBalance = $('[name=stop-target]').val();
       var balance;
+
+      var PRIMEDICE_RATE_LIMIT = 525; // live value
+      // var PRIMEDICE_RATE_LIMIT = 2000; // slower for testing purposes
 
       Session.set('latestRunBet', {
         total: 0,

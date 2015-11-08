@@ -3,29 +3,42 @@
 </head>
 
 <body>
-  <h1>Primedice Winner</h1>
+  <div class="container">
+    <div class="page-header">
+      <h1>Primedice Winner</h1>
+    </div>
 
-  {{> displayBalance}}
-  <hr>
-  {{> makeBet}}
-  <hr>
-  {{> startRun}}
+    {{> displayBalance}}
+    <hr>
+    {{> makeBet}}
+    <hr>
+    {{> startRun}}
+  </div>
 </body>
 
 <template name="displayBalance">
   <div id="balance-area">
-    Your balance is <span id="user-balance">{{getBalance}}</span>.
-    <button id="get-balance">Update balance</button>
-    <a id="primedice-faucet" href="https://primedice.com/play" target="_blank">Primedice faucet</a>
+    <h2>Your balance: <span id="user-balance">{{getBalance}}</span> satoshi.</h2>
+    <button id="get-balance" class="btn btn-primary">Update balance</button>
+    <a id="primedice-faucet" class="btn btn-link" href="https://primedice.com/play" target="_blank">Primedice faucet</a>
     <p class="error-text"></p>
   </div>
 </template>
 
 <template name="makeBet">
   <div id="bet-area">
-    Amount: <input name="amount" type="number" value="1">
-    Target: <input name="bet-target" type="number" value="50">
-    <button id="make-bet">Make a bet</button>
+    <h3>Single bet</h3>
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="amount">Amount</label>
+        <input name="amount" class="form-control" type="number" value="1">
+      </div>
+      <div class="form-group">
+        <label for="bet-target">Target</label>
+        <input name="bet-target" class="form-control" type="number" value="50">
+      </div>
+      <button id="make-bet" class="btn btn-success">Make a bet</button>
+    </form>
     <p class="error-text"></p>
     <p>You bet <span id="bet-total">{{getBetTotal}}</span>.</p>
     <p>You {{#if getBetWin}}won{{else}}lost{{/if}} <span id="win-loss-total">{{getBetWinLossTotal}}</span>.</p>
@@ -34,12 +47,20 @@
 
 <template name="startRun">
   <div id="run-area">
-    Base: <input name="base" type="number" value="1">
-    Target: <input name="run-target" type="number" value="33">
-    <button id="start-run">Start run</button>
-    <button id="stop-run">Stop run</button>
+    <h3>Bet run</h3>
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="base">Base</label>
+        <input name="base" class="form-control" type="number" value="1">
+      </div>
+      <div class="form-group">
+        <label for="run-target">Target</label>
+        <input name="run-target" class="form-control" type="number" value="33">
+      </div>
+      <button id="start-run" class="btn btn-success">Start run</button>
+      <button id="stop-run" class="btn btn-danger">Stop run</button>
+    </form>
     <p class="error-text"></p>
-    <p>You bet <span id="run-total">{{getRunTotal}}</span>.</p>
-    <p>You {{#if getRunWin}}won{{else}}lost{{/if}} <span id="run-win-loss-total">{{getRunWinLossTotal}}</span>.</p>
+    <p>You bet <span id="run-total">{{getRunTotal}}</span>. You {{#if getRunWin}}won{{else}}lost{{/if}} <span id="run-win-loss-total">{{getRunWinLossTotal}}</span>.</p>
   </div>
 </template>
